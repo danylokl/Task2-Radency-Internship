@@ -13,10 +13,31 @@ namespace Task2_Radency_Internship.Services
             _reviewRepository = reviewRepository;
             _ratingRepository = ratingRepository;
         }
-        public async Task<List<Book>> GetBooksAsync()
+        public async Task<List<Book>> GetAllBooksAsync()
         {
             var result = await _bookRepository.GetAllAsync();
             return result;
+        }
+        public async Task<Book> GetBookAsync(int id)
+        {
+            var result = await _bookRepository.GetByIdAsync(id);
+            return result;
+        }
+        public async Task DeleteBook(int id)
+        {
+            await _bookRepository.Remove(id);
+        }
+        public async Task CreateBook(Book book)
+        {
+            await _bookRepository.Create(book);    
+        }
+        public async Task UpdateBook(Book entity)
+        {
+           await  _bookRepository.Update(entity);
+        }
+        public async Task SaveChanges ()
+        {
+            await _bookRepository.SaveChanges();
         }
     }
 }

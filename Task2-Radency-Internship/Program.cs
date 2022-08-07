@@ -23,7 +23,7 @@ namespace Task2_Radency_Internship
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-
+            
             app.UseHttpsRedirection();
             app.UseDeveloperExceptionPage();
             app.UseAuthorization();

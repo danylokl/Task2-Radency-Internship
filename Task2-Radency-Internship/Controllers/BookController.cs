@@ -5,27 +5,132 @@ using Task2_Radency_Internship.Services;
 using System.Linq;
 namespace Task2_Radency_Internship.Controllers
 {
-    [Route("[controller]")]
+
     [ApiController]
     public class BookController : ControllerBase
     {
         private readonly BookService _bookService;
+        private readonly IConfiguration _config;
 
-        public BookController(BookService bookService)
+        public BookController(BookService bookService, IConfiguration config)
         {
             _bookService = bookService;
+            _config = config;
         }
         [HttpGet]
-        public async Task<ActionResult<List<BookDto>>> Get()
+        [Route("[action]")]
+        public async Task<ActionResult<List<BookWithRatingDto>>> Books(/*[FromQuery] */ string? order)
         {
-            var books = await _bookService.GetBooksAsync();
+            var books = await _bookService.GetAllBooksAsync();
 
-            var result= books.Select(book => BookDto.ToDtoModel(book)).ToList();
+            var result = books.Select(book => BookWithRatingDto.ToDtoModel(book)).ToList();
+            if (order == "author")
+            {
+                result.Sort((a, b) => string.Compare(a.Author, b.Author));
+            }
+            else
+            if (order == "title")
+            {
+                result.Sort((a, b) => string.Compare(a.Title, b.Title));
+            }
 
             return Ok(result);
-            
-            
-            //return Ok(result.Select(book => BookDto.ToDtoModel(book)).ToList());
+
+
+        }
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<List<BookWithRatingDto>>> Recommended(string? genre)
+        {
+            var books = await _bookService.GetAllBooksAsync();
+            var booksWithRating = books.Select(book => BookWithRatingDto.ToDtoModel(book)).ToList();
+            var result = booksWithRating.OrderByDescending(book => book.Ratings).Where(p => p.ReviewsNumber > 2).Take(10).ToList();   //For testing purpose, required ReviewsNumber reduced to 2
+            if (genre != null)
+            {
+                result = result.Where(p => p.Genre == genre).Select(a => a).ToList();
+            }
+
+            return Ok(result);
+        }
+        [HttpGet]
+        [Route("[action]/{id}")]
+        public async Task<ActionResult<List<BookDetailedReviewDto>>> Books(int id)
+        {
+            var books = await _bookService.GetBookAsync(id);
+            var result = BookDetailedReviewDto.ToDtoModel(books);
+            return Ok(result);
+
+        }
+        [HttpDelete]
+        [Route("[action]/{id}")]
+        public async Task<ActionResult> Books(int id, string? secret)
+        {
+            if (secret == _config["SecretWord"])
+            {
+                await _bookService.DeleteBook(id);
+            }
+            return Accepted();
+        }
+        [HttpPost]
+        [Route("[action]/save")]
+        public async Task<ActionResult> Books([FromBody] NewBookDto newBookDto)
+        {
+
+            var book = newBookDto.ToModel();
+            var bookexist = await _bookService.GetBookAsync(newBookDto.Id);
+            if (bookexist != null)
+            {
+
+                bookexist.Author = newBookDto.Author;
+                bookexist.Cover = newBookDto.Cover;
+                bookexist.Content = newBookDto.Content;
+                bookexist.Title = newBookDto.Title;
+                bookexist.Genre = newBookDto.Genre;
+                await _bookService.SaveChanges();
+            }
+            else
+            {
+                await _bookService.CreateBook(book);
+            }
+
+            return Accepted(new { id = book.Id });
+        }
+        [HttpPut]
+        [Route("books/{id}/[action]")]
+        public async Task<ActionResult> Review(int id, [FromBody] ReviewDto reviewDto)
+        {
+            var bookexist = await _bookService.GetBookAsync(id);
+            if (bookexist != null)
+            {
+                var review = reviewDto.ToModel();
+                review.BookId = id;
+                bookexist.Reviews.Add(review);
+                await _bookService.SaveChanges();
+            }
+            return Accepted(new { id = bookexist.Reviews.Last().Id });
+        }
+        [HttpPut]
+        [Route("books/{id}/[action]")]
+        public async Task<ActionResult> rate(int id, [FromBody] RatingDto ratingDto)
+        {
+            var bookexist = await _bookService.GetBookAsync(id);
+            if (ratingDto.Score >= 1 && ratingDto.Score <= 5)
+            {
+                
+                if (bookexist != null)
+                {
+                    var rate = ratingDto.ToModel();
+                    rate.BookId = id;
+                    bookexist.Ratings.Add(rate);
+                    await _bookService.SaveChanges();
+                }
+            }
+            else
+            {
+                return BadRequest("score must be between 1 and 5");
+            }
+
+            return Accepted(new { id = bookexist.Ratings.Last().Id });
         }
     }
 }

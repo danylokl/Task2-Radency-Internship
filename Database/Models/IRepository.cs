@@ -14,8 +14,8 @@ namespace Database.Models
 
        Task< TEntity>Create(TEntity entity);
 
-        void Update(TEntity entity);
-
+        Task Update(TEntity entity);
         Task Remove(int id);
+        Task SaveChanges();
     }
 }
