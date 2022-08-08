@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 namespace Database
 {
     public class Context : DbContext
@@ -51,7 +52,6 @@ namespace Database
                 new Review() { Id = 8, Message = "some message 8", Reviewer = "Orla Greene", BookId = 9 },
                 new Review() { Id = 9, Message = "some message 9", Reviewer = "Chaim West", BookId = 10 },
                 new Review() { Id = 10, Message = "some message 10", Reviewer = "Ivory Banks", BookId = 5 }
-        
                 );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
