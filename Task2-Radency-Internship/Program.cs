@@ -5,7 +5,7 @@ using Database.Models;
 using Task2_Radency_Internship.Services;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpLogging;
-  
+
 namespace Task2_Radency_Internship
 {
     public class Program
@@ -19,10 +19,13 @@ namespace Task2_Radency_Internship
             builder.Services.AddControllers();
             builder.Services.AddScoped<BookService>();
             builder.Services.Add(ServiceDescriptor.Scoped(typeof(IRepository<>), typeof(BookRepository<>)));
-            builder.Services.AddExceptionHandler(builder=>
-            builder.ExceptionHandlingPath="/error");
+            builder.Services.AddExceptionHandler(builder =>
+            builder.ExceptionHandlingPath = "/error");
             builder.Services.AddHttpLogging(option =>
-            option.LoggingFields = HttpLoggingFields.Request);
+            {
+                option.LoggingFields = HttpLoggingFields.Request;
+
+            });
             builder.Services.AddDbContext<Context>(options =>
             options.UseInMemoryDatabase(databaseName: "Library"));
             var app = builder.Build();
@@ -31,11 +34,11 @@ namespace Task2_Radency_Internship
             app.UseHttpLogging();
             app.UseHttpsRedirection();
             app.UseExceptionHandler();
-       
+
             app.UseDeveloperExceptionPage();
             app.UseAuthorization();
-           app.UseRouting();
-            
+            app.UseRouting();
+
             app.MapControllers();
 
             app.Run();
