@@ -64,7 +64,7 @@ namespace Task2_Radency_Internship.Controllers
 
             return Ok(result);
         }
-
+   
         [HttpGet]
         [Route("books/{id}")]
         public async Task<ActionResult<List<BookDetailedReviewDto>>> GetBook(int id)
@@ -124,7 +124,7 @@ namespace Task2_Radency_Internship.Controllers
 
             return Accepted(new { id = book.Id });
         }
-
+      
         [HttpPut]
         [Route("books/{id}/[action]")]
         public async Task<ActionResult> Review(int id, [FromBody] ReviewDto reviewDto)
