@@ -51,21 +51,11 @@ namespace Database
                 new Review() { Id = 8, Message = "some message 8", Reviewer = "Orla Greene", BookId = 9 },
                 new Review() { Id = 9, Message = "some message 9", Reviewer = "Chaim West", BookId = 10 },
                 new Review() { Id = 10, Message = "some message 10", Reviewer = "Ivory Banks", BookId = 5 }
-                //new Review() { Id = 1, Message = "some message 1", Reviewer = "Fatima Dyer" },
-                //new Review() { Id = 2, Message = "some message 2", Reviewer = "Chelsea West" },
-                //new Review() { Id = 3, Message = "some message 3", Reviewer = "Sierra Travi" },
-                //new Review() { Id = 4, Message = "some message 4", Reviewer = "Gary Chapman" },
-                //new Review() { Id = 5, Message = "some message 5", Reviewer = "Akeem Chan" },
-                //new Review() { Id = 6, Message = "some message 6", Reviewer = "Ciaran Montg" },
-                //new Review() { Id = 7, Message = "some message 7", Reviewer = "Matthew Jack" },
-                //new Review() { Id = 8, Message = "some message 8", Reviewer = "Orla Greene" },
-                //new Review() { Id = 9, Message = "some message 9", Reviewer = "Chaim West" },
-                //new Review() { Id = 10, Message = "some message 10", Reviewer = "Ivory Bank" }
+        
                 );
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-E3LF3J7\SQLEXPRESS;Initial Catalog=Library;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
             optionsBuilder.UseLazyLoadingProxies();
             base.OnConfiguring(optionsBuilder);
         }

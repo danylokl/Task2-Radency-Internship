@@ -33,17 +33,6 @@ namespace Task2_Radency_Internship.Dto
                 }).ToList()
             };
         }
-        //public Book ToModel()
-        //{
-        //    return new Book()
-        //    {
-        //        Title = Title,
-        //        Genre = Genre,
-        //        Cover = Cover,
-        //        Author = Author,
-        //        Content = Content,
-        //        Id = Id
-        //    };
-        //}
+
     }
 }
