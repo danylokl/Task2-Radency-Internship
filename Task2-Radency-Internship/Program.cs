@@ -28,6 +28,7 @@ namespace Task2_Radency_Internship
             });
             builder.Services.AddDbContext<Context>(options =>
             options.UseInMemoryDatabase(databaseName: "Library"));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

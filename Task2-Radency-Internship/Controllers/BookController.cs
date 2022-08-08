@@ -5,7 +5,6 @@ using Task2_Radency_Internship.Services;
 using System.Linq;
 namespace Task2_Radency_Internship.Controllers
 {
-
     [ApiController]
     public class BookController : ControllerBase
     {
@@ -108,9 +107,9 @@ namespace Task2_Radency_Internship.Controllers
         {
             var book = newBookDto.ToModel();
             var bookexist = await _bookService.GetBookAsync(newBookDto.Id);
+
             if (bookexist != null)
             {
-
                 bookexist.Author = newBookDto.Author;
                 bookexist.Cover = newBookDto.Cover;
                 bookexist.Content = newBookDto.Content;

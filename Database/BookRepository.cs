@@ -13,21 +13,19 @@ namespace Database
         private readonly Context _context;
         protected DbSet<T> DbSet;
 
-        public  BookRepository(Context context)
+        public BookRepository(Context context)
         {
             //context.Database.EnsureDeleted();
             _context = context;
-            
-            context.Database.EnsureCreated();
-            
-            DbSet = _context.Set<T>();
-            
-        }
 
+            context.Database.EnsureCreated();
+
+            DbSet = _context.Set<T>();
+        }
         public async Task<List<T>> GetAllAsync()
         {
             var result = await DbSet.ToListAsync();
-            
+
             return result;
         }
 
@@ -40,7 +38,7 @@ namespace Database
         public async Task<T> Create(T entity)
         {
             var result = await DbSet.AddAsync(entity);
-          await  _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
@@ -49,7 +47,6 @@ namespace Database
             _context.Entry(entity).State = EntityState.Modified;
             DbSet.Update(entity);
             await _context.SaveChangesAsync();
-           
         }
 
         public void Remove(T entity)
@@ -64,7 +61,7 @@ namespace Database
             Remove(entity);
         }
 
-   public async Task SaveChanges()
+        public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
         }
